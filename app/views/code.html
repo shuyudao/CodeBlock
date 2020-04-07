@@ -1,0 +1,63 @@
+{{include file='common/head.html'}}
+<div id="container" style="height: 100%;">
+    <div id="content" style="height: 100%;">
+        <div id="code-edit">
+            <textarea name="code" id="code_text" cols="30" rows="10">{{$code|default:""}}</textarea>
+        </div>
+        <div id="right-box">
+            <div class="cell">
+                <div class="label">分类</div>
+                <select id="cate-sel" class="el-select">
+                    {{foreach from=$cates item=item}}
+                        {{if $cateid eq $item.id}}
+                        <option selected value="{{$item.id}}">{{$item.name}}</option>
+                        {{else}}
+                        <option value="{{$item.id}}">{{$item.name}}</option>
+                        {{/if}}
+                    {{/foreach}}
+                </select>
+            </div>
+            <div class="cell">
+                <div class="label">标题</div>
+                <input type="text" id="title" value="{{$title|default:''}}" placeholder="请输入片段标题">
+            </div>
+            <button code-id="{{$codeid|default:''}}" type="button" id="save" class="el-button">
+                <span>发 布</span>
+            </button>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.52.2/lib/codemirror.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.52.2/mode/javascript/javascript.js"></script>
+<script>
+    let myTextarea = document.getElementById('code_text');
+    var CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
+        mode: 'javascript',
+        theme: 'base16-light',
+        lineNumbers: true //显示行号
+    });
+    var codeid = $("#save").attr("code-id");
+    $("#save").click(function(){
+        $("#save span").html("发布中...")
+        $.ajax({
+            type:"post",
+            url:"/index.php/code/save",
+            data:{
+                code:CodeMirrorEditor.getValue(),
+                title: $("#title").val(),
+                cateid: $("#cate-sel").val(),
+                id:codeid
+            },
+            success:function(res){
+                if(res.code==200){
+                    window.location.href = "/";
+                }else{
+                    alert("发布失败");
+                    $("#save span").html("发 布")
+                }
+            }
+        })
+
+    })
+</script>

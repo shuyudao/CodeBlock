@@ -1,0 +1,106 @@
+{{include file='common/head.html'}}
+<div id="container">
+    <div id="content">
+        <div id="topics">
+            {{foreach from=$cates item=item}}
+            <div class="topic-box" cate-id="{{$item.id}}">
+                <div class="topic-card">
+                    <div class="topic-body">
+                        <div class="topic">
+                            <div class="topic-lbox">
+                                <div class="topic-meta">
+                                    <h4>{{$item.name}}</h4>
+                                    <p>{{$item.count}} 个片段</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/foreach}}
+            <div class="topic-box" id="new_cate" cate-id="NULL">
+                <div class="topic-card">
+                    <div class="topic-body">
+                        <div class="topic">
+                            <div class="topic-lbox">
+                                <svg class="icon" style="width: 2em;height: 2.6em;" aria-hidden="true">
+                                    <use xlink:href="#icon-xinzeng-"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="cate_edit">
+        <h2>编辑分类</h2>
+        <br>
+        <br>
+        <div class="cell">
+            <div class="label">分类名称</div>
+            <input type="text" id="title" placeholder="">
+        </div>
+
+        <button type="button" id="save_cate" class="el-button">
+            <span>保存</span>
+        </button>
+        <button type="button" id="close" class="el-button">
+            <span>取消</span>
+        </button>
+        <button type="button" id="del_cate" class="el-button">
+            <span>删除分类</span>
+            <span style="font-size: 10px;">不会删除片段</span>
+        </button>
+    </div>
+    
+</div>
+<script src="//at.alicdn.com/t/font_1737673_ertf6urwomn.js"></script>
+<script>
+    var cateid = 0;
+    $(".topic-box").click(function(){
+        cateid = $(this).attr("cate-id");
+        $("#cate_edit").show();
+        $("#title").val($(this).find("h4").html())
+    })
+
+    $("#save_cate").click(function(){
+        var name = $("#title").val();
+        $("#save_cate span").html("提交中...");
+        if(name!=""&&cateid!="NULL"){
+            $.ajax({
+                type:"post",
+                url:"/index.php/cate/update",
+                data:{id:cateid,name:name},
+                success:function(){
+                    window.location.reload()
+                }
+            })
+        }else if(name!=""){
+            $.ajax({
+                type:"post",
+                url:"/index.php/cate/save",
+                data:{name:name},
+                success:function(){
+                    window.location.reload()
+                }
+            })
+        }
+    })
+
+    $("#del_cate").click(function(){
+        $.get("/index.php/cate/del/id/"+cateid,function(){window.location.reload()})
+    })
+
+    $("#close").click(function(){
+        $("#cate_edit h2").html("编辑分类");
+        $("#del_cate").show();
+        $("#cate_edit").hide();
+    })
+
+    $("#new_cate").click(function(){
+        $("#cate_edit h2").html("新增分类");
+        $("#del_cate").hide();
+    })
+
+</script>

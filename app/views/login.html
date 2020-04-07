@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <style>
+        #login {
+            max-width: 400px;
+            width: 90%;
+            height: 340px;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+            margin: 40px auto;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, 微软雅黑, Arial, sans-serif !important;
+        }
+
+        .cell {
+            margin-bottom: 32px;
+            width: 100%;
+        }
+
+        .cell .label {
+            line-height: 1;
+            padding-left: 4px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #606266;
+        }
+
+        .cell .el-select {
+            padding: 8px 4px;
+            width: 100%;
+            outline: none;
+        }
+
+        .cell input {
+            -webkit-appearance: none;
+            background-color: #fff;
+            background-image: none;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            box-sizing: border-box;
+            color: #606266;
+            display: inline-block;
+            font-size: inherit;
+            height: 40px;
+            line-height: 40px;
+            outline: 0;
+            padding: 0 15px;
+            transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+            width: 100%;
+        }
+
+        .el-button {
+            display: inline-block;
+            line-height: 1;
+            white-space: nowrap;
+            cursor: pointer;
+            background: #fff;
+            border: 1px solid #dcdfe6;
+            color: #606266;
+            -webkit-appearance: none;
+            text-align: center;
+            box-sizing: border-box;
+            outline: 0;
+            margin: 0;
+            transition: .1s;
+            font-weight: 500;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            width: 98%;
+            height: 36px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="login">
+        <h2 align="center">CodeBlock</h2>
+        <div class="cell" style="margin-top: 40px;">
+            <div class="label">账号</div>
+            <input type="text" id="user" placeholder="">
+        </div>
+        <div class="cell">
+            <div class="label">密码</div>
+            <input type="password" id="pwd" placeholder="">
+        </div>
+        <button type="button" id="loginbtn" class="el-button">
+            <span>登录</span>
+        </button>
+    </div>
+</body>
+
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="/static/js/md5.js"></script>
+<script>
+    // 设置cookie   
+    function setCookie(name,value)
+    {
+        var Days = 30;
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days*24*60*60*1000);
+        document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString()+";path=/";
+    }
+
+    $("#loginbtn").click(function () {
+        var c = hex_md5($("#user").val() + $("#pwd").val() + "codeblock");
+        setCookie("user", c);
+        window.location.href = "/";
+    })
+</script>

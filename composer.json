@@ -1,0 +1,11 @@
+{
+    "name":"CodeBlock",
+    "description": "个人的代码片段管理存储工具",
+    "type": "web",
+    "keywords": ["php","code","CodeBlock"],
+    "require": {
+        "php":">= 5.6.0",
+        "greg0/lazer-database": "^1.2",
+        "smarty/smarty": "~3.1"
+    }
+}
